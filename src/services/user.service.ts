@@ -7,28 +7,36 @@ const createUser = async (userData: IUsers): Promise<IUsers> => {
 };
 
 const getAllUser = async (): Promise<IUsers[]> => {
-  const result = await User.find();
+  const result = await User.find().select(
+    'username fullName age email address -_id'
+  );
   return result;
 };
 
-const getSingleUser = async (id: string): Promise<IUsers | null> => {
-  const result = await User.findById(id);
+const getSingleUser = async (userId: number): Promise<IUsers | null> => {
+  const result = await User.findOne({ userId: userId });
   return result;
 };
 
 const updateUser = async (
-  id: string,
+  userId: number,
   updatedData: IUsers
 ): Promise<IUsers | null> => {
-  const result = await User.findByIdAndUpdate(id, updatedData, {
-    new: true,
-    runValidators: true,
-  });
+  const result = await User.findOneAndUpdate(
+    { userId: userId },
+    { $set: updatedData },
+    { new: true, runValidators: true }
+  );
   return result;
 };
 
-const deleteUser = async (id: string): Promise<IUsers | null> => {
-  const result = await User.findByIdAndDelete(id);
+const deleteUser = async (userId: number): Promise<IUsers | null> => {
+  const user = await User.findOne({ userId: userId });
+  if (!user) {
+    return null;
+  }
+  user.isDeleted = true;
+  const result = await user.save();
   return result;
 };
 

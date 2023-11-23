@@ -36,14 +36,25 @@ const getAllUser = async (req: Request, res: Response) => {
 
 const getSingleUser = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { userId } = req.params;
 
-    const result = await userServices.getSingleUser(id);
-    res.status(200).json({
-      success: true,
-      message: 'User fetched successfully!',
-      data: result,
-    });
+    const result = await userServices.getSingleUser(parseInt(userId));
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'User fetched successfully!',
+        data: result,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
   } catch (error: any) {
     res.status(404).json({
       success: false,
@@ -59,14 +70,26 @@ const getSingleUser = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
   try {
     const updatedData = req.body;
-    const { id } = req.params;
 
-    const result = await userServices.updateUser(id, updatedData);
-    res.status(201).json({
-      success: true,
-      message: 'User updated successfully!',
-      data: result,
-    });
+    const { userId } = req.params;
+
+    const result = await userServices.updateUser(parseInt(userId), updatedData);
+    if (result) {
+      res.status(201).json({
+        success: true,
+        message: 'User updated successfully!',
+        data: result,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
   } catch (error: any) {
     res.status(404).json({
       success: false,
@@ -81,14 +104,25 @@ const updateUser = async (req: Request, res: Response) => {
 
 const deleteUser = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { userId } = req.params;
 
-    await userServices.deleteUser(id);
-    res.status(201).json({
-      success: true,
-      message: 'User deleted successfully!',
-      data: null,
-    });
+    const result = await userServices.deleteUser(parseInt(userId));
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'User deleted successfully!',
+        data: null,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
   } catch (error: any) {
     res.status(404).json({
       success: false,

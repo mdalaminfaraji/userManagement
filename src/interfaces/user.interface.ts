@@ -16,6 +16,7 @@ interface IUsers {
     city: string;
     country: string;
   };
+  isDeleted: boolean;
 }
 
 export default IUsers;

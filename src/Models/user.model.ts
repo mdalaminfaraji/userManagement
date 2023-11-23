@@ -61,6 +61,10 @@ const userSchema = new Schema<IUsers>({
       required: [true, 'Street is Required'],
     },
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // pre save middleware/hook
@@ -75,10 +79,29 @@ userSchema.pre('save', async function (next) {
 
   next();
 });
+
+// Query Middleware
+
+userSchema.pre('find', function (next) {
+  // console.log(this);
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+userSchema.pre('findOne', function (next) {
+  // console.log(this);
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+userSchema.pre('findOneAndUpdate', function (next) {
+  // console.log(this);
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
 // Middleware to exclude password field from response
 userSchema.methods.toJSON = function () {
   const user = this.toObject();
   delete user.password;
+  delete user.isDeleted;
   return user;
 };
 
