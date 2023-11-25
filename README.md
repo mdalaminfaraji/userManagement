@@ -21,6 +21,10 @@
 
 ### another
 
+## Starting the Project:
+
+- Once the dependencies are installed, you can start the project. The method to start a project can vary. Commonly, projects have a script defined in the package.json file for starting the application. The script might be named start or something similar.
+
 ## What is express js?
 
 - 🎗️ Express js is a Fast, unopinionated and minimalist web framework for Node
