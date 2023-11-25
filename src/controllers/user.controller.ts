@@ -1,10 +1,13 @@
 import { Request, Response } from 'express';
 import { userServices } from '../services/user.service';
+import userValidationSchema from './user.validation';
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const userData = req.body;
-    const result = await userServices.createUser(userData);
+
+    const validatedUser = userValidationSchema.parse(userData);
+    const result = await userServices.createUser(validatedUser);
     res.status(201).json({
       success: true,
       message: 'User created successfully!',
@@ -134,6 +137,7 @@ const deleteUser = async (req: Request, res: Response) => {
     });
   }
 };
+
 export const userController = {
   createUser,
   getAllUser,

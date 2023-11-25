@@ -83,17 +83,14 @@ userSchema.pre('save', async function (next) {
 // Query Middleware
 
 userSchema.pre('find', function (next) {
-  // console.log(this);
   this.find({ isDeleted: { $ne: true } });
   next();
 });
 userSchema.pre('findOne', function (next) {
-  // console.log(this);
   this.find({ isDeleted: { $ne: true } });
   next();
 });
 userSchema.pre('findOneAndUpdate', function (next) {
-  // console.log(this);
   this.find({ isDeleted: { $ne: true } });
   next();
 });
@@ -102,6 +99,8 @@ userSchema.methods.toJSON = function () {
   const user = this.toObject();
   delete user.password;
   delete user.isDeleted;
+  delete user._id;
+  delete user.__v;
   return user;
 };
 
