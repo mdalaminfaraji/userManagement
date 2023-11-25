@@ -1,6 +1,6 @@
 ## vercel Deploy link:
 
-- https://assignment2-ge9hm4vll-mdalaminfaraji.vercel.app/
+- https://assignment2-ruby.vercel.app/
 
 ## how to run the application locally.
 
