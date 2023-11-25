@@ -17,7 +17,7 @@ const userSchema = new Schema<IUsers>({
   password: {
     type: String,
     required: [true, 'Password is Required'],
-    maxlength: [15, 'Password must be less than 15 character'],
+    maxlength: [100, 'Password must be less than 15 character'],
   },
   fullName: {
     firstName: {
@@ -64,6 +64,17 @@ const userSchema = new Schema<IUsers>({
   isDeleted: {
     type: Boolean,
     default: false,
+  },
+
+  orders: {
+    type: [
+      {
+        productName: String,
+        price: Number,
+        quantity: Number,
+      },
+    ],
+    default: [],
   },
 });
 

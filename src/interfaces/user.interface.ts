@@ -1,3 +1,9 @@
+interface IOrder {
+  productName: string;
+  price: number;
+  quantity: number;
+}
+
 interface IUsers {
   userId: number;
   username: string;
@@ -18,6 +24,7 @@ interface IUsers {
   };
 
   isDeleted: boolean;
+  orders: IOrder[];
 }
 
 export default IUsers;

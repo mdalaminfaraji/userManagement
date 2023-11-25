@@ -1,9 +1,13 @@
 import { z } from 'zod';
-
+const orderSchema = z.object({
+  productName: z.string(),
+  price: z.number(),
+  quantity: z.number(),
+});
 const userValidationSchema = z.object({
   userId: z.number().int().positive(),
   username: z.string(),
-  password: z.string().max(15),
+  password: z.string().max(100),
   fullName: z.object({
     firstName: z.string(),
     lastName: z.string(),
@@ -18,6 +22,7 @@ const userValidationSchema = z.object({
     country: z.string(),
   }),
   isDeleted: z.boolean().default(false),
+  orders: z.array(orderSchema).default([]),
 });
 
 export default userValidationSchema;

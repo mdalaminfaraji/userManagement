@@ -6,15 +6,19 @@ const createUser = async (userData: IUsers): Promise<IUsers> => {
   return result;
 };
 
+const getUserById = async (userId: number): Promise<IUsers | null> => {
+  return User.findOne({ userId }).select('-orders').exec();
+};
+
 const getAllUser = async (): Promise<IUsers[]> => {
   const result = await User.find().select(
-    'username fullName age email address -_id'
+    'username fullName age email address '
   );
   return result;
 };
 
 const getSingleUser = async (userId: number): Promise<IUsers | null> => {
-  const result = await User.findOne({ userId: userId });
+  const result = await User.findOne({ userId: userId }).select('-orders');
   return result;
 };
 
@@ -26,17 +30,50 @@ const updateUser = async (
     { userId: userId },
     { $set: updatedData },
     { new: true, runValidators: true }
-  );
+  ).select('-orders');
   return result;
 };
 
 const deleteUser = async (userId: number): Promise<IUsers | null> => {
-  const user = await User.findOne({ userId: userId });
-  if (!user) {
-    return null;
+  try {
+    const user = await User.findOne({ userId });
+
+    if (!user) {
+      return null;
+    }
+
+    user.isDeleted = true;
+
+    const result = await user.save();
+
+    return result;
+  } catch (error) {
+    console.error('Error saving user:', error);
+    throw error;
   }
-  user.isDeleted = true;
-  const result = await user.save();
+};
+
+const updateWithOrders = async (
+  userId: number,
+  updatedData: Object
+): Promise<IUsers | null> => {
+  const result = await User.findOneAndUpdate(
+    { userId },
+    { $push: { orders: updatedData } },
+    { new: true, runValidators: true }
+  );
+  return result;
+};
+
+const getAllOrders = async (userId: number): Promise<IUsers | null> => {
+  const result = await User.findOne({ userId }).select('orders');
+
+  return result;
+};
+
+const calculateTotalPrice = async (userId: number): Promise<IUsers | null> => {
+  const result = await User.findOne({ userId }).select('orders');
+
   return result;
 };
 
@@ -46,4 +83,8 @@ export const userServices = {
   getSingleUser,
   updateUser,
   deleteUser,
+  updateWithOrders,
+  getUserById,
+  getAllOrders,
+  calculateTotalPrice,
 };
